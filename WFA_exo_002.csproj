@@ -82,9 +82,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\CLError\CLError.csproj">
-      <Project>{6d566073-576f-4e67-bc1f-a483e099f00b}</Project>
-      <Name>CLError</Name>
+    <ProjectReference Include="..\CLVerification\CLVerification.csproj">
+      <Project>{f4d75a1e-2648-40f6-9e10-7fc3ac800e2c}</Project>
+      <Name>CLVerification</Name>
     </ProjectReference>
     <ProjectReference Include="..\CMFacture\CMFacture.csproj">
       <Project>{75f371ff-e688-4bdd-91a9-d04900a2a900}</Project>

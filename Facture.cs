@@ -11,8 +11,9 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.Globalization;
 using CMFacture;
-using CLError;
-using CLError.ErrorCheckTB;
+//using CLError;
+//using CLError.ErrorCheckTB;
+using CLVerification;
 
 namespace WFA_exo_002
 {
@@ -23,30 +24,97 @@ namespace WFA_exo_002
             InitializeComponent();
         }
 
-        private Boolean checkObjName = false;
-        private Boolean checkObjDate = false;
-        private Boolean checkObjAmount = false;
-        private Boolean checkObjZipCode = false;
-
 
         private void CheckFacture()
         {
             string validationOutput = "Nom :  " + tbName.Text + "\nDate :   " + tbDate.Text + "\nMontant :   " + tbAmount.Text.ToString() + "\nCP :   " + tbZipCode.Text.ToString();
 
-            SetErrorFacture(tbName);
-            SetErrorFacture(tbDate);
-            SetErrorFacture(tbAmount);
-            SetErrorFacture(tbZipCode);
-
-            if (btnValidate.Enabled)
+            if ((Verification.CheckName(tbName.Text) == "") & (Verification.CheckDate(tbDate.Text) == "") & (Verification.CheckAmount(tbAmount.Text) == "") & (Verification.CheckZipCode(tbZipCode.Text) == ""))
             {
-                MessageBox.Show(validationOutput, "Facture valide");
-                ClassMetierFacture classMetierFacture = new ClassMetierFacture(tbName.Text, tbDate.Text, tbAmount.Text, tbZipCode.Text);
-                classMetierFacture.ToString();
+                //if (btnValidate.Enabled)
+                //{
+                    CultureInfo myCIintl = new CultureInfo("fr-FR", false);
+                    
+                    //Boolean tbNameExact = string.TryParse(tbName.Text, out string resultNameExactValue);
+                    Boolean tbDateExact = DateTime.TryParseExact(tbDate.Text, "dd/MM/yyyy", myCIintl, DateTimeStyles.None, out DateTime resultDateExactValue);
+                    Boolean tbAmountExact = double.TryParse(tbAmount.Text, out double resultAmountExactValue);
+                    Boolean tbZipCodeExact = int.TryParse(tbZipCode.Text, out int resultZipCodeExactValue);
+
+                //DateTime d = DateTime.MinValue;
+
+                //richTextBox1.Text = $"{tbNameExact} {tbDateExact} {tbAmountExact} {tbZipCodeExact}";
+
+                if ((tbName.Text != "") & tbDateExact & tbAmountExact & tbZipCodeExact)
+                {
+                    MessageBox.Show(validationOutput, "Facture valide");
+                    ClassMetierFacture classMetierFacture = new ClassMetierFacture(tbName.Text, resultDateExactValue, resultAmountExactValue, resultZipCodeExactValue); // resultNameExactValue
+                    classMetierFacture.ToString();
+                    DeleteAllFields();
+                }
+                else
+                {
+                    MessageBox.Show(validationOutput, "Une exeption est levée - V1");
+                    CheckAllFields();
+                    SystemSounds.Beep.Play();
+                }
+
             }
             else
             {
+                MessageBox.Show(validationOutput, "Une exeption est levée - V2");
+                CheckAllFields();
+                //richTextBox1.Text = validationOutput;
                 SystemSounds.Beep.Play();
+            }
+        }
+
+        private void CheckAllFields()
+        {
+            // Check each field
+            if (!(Verification.CheckName(tbName.Text) == ""))
+            {
+                errorProvider.SetError(tbName, Verification.CheckName(tbName.Text));
+                tbName.Focus();
+            }
+            else
+            {
+                errorProvider.SetError(tbName, null);
+            }
+            if (!(Verification.CheckDate(tbDate.Text) == ""))
+            {
+                errorProvider.SetError(tbDate, Verification.CheckDate(tbDate.Text));
+                tbDate.Focus();
+            }
+            else
+            {
+                errorProvider.SetError(tbDate, null);
+            }
+            if (!(Verification.CheckAmount(tbAmount.Text) == ""))
+            {
+                errorProvider.SetError(tbAmount, Verification.CheckAmount(tbAmount.Text));
+                tbAmount.Focus();
+            }
+            else
+            {
+                errorProvider.SetError(tbAmount, null);
+            }
+            if (!(Verification.CheckZipCode(tbZipCode.Text) == ""))
+            {
+                errorProvider.SetError(tbZipCode, Verification.CheckZipCode(tbZipCode.Text));
+                tbZipCode.Focus();
+            }
+            else
+            {
+                errorProvider.SetError(tbZipCode, null);
+            }
+            // All is checked
+            if ((Verification.CheckName(tbName.Text) == "") & (Verification.CheckDate(tbDate.Text) == "") & (Verification.CheckAmount(tbAmount.Text) == "")  & (Verification.CheckZipCode(tbZipCode.Text) == ""))
+            {
+                btnValidate.Enabled = true;
+            }
+            else
+            {
+                btnValidate.Enabled = false;
             }
         }
 
@@ -82,8 +150,17 @@ namespace WFA_exo_002
         /// <param name="e"></param>
         private void btnValidate_Click(object sender, EventArgs e)
         {
+            if( (Verification.CheckName(tbName.Text)=="") & (Verification.CheckDate(tbDate.Text) == "") & (Verification.CheckAmount(tbAmount.Text) == "") & (Verification.CheckZipCode(tbZipCode.Text) == ""))
+            {
+                CheckFacture();
+            }
+            else
+            {
+                CheckAllFields();
+                SystemSounds.Beep.Play();
+            }
             //rtbErrorProvider.Clear();
-            CheckFacture();
+            //CheckFacture();
         }
 
 
@@ -91,182 +168,69 @@ namespace WFA_exo_002
         /// textBox "TextChanged" check text boxes and error icones
         private void tbName_TextChanged(object sender, EventArgs e)
         {
-            SetErrorFacture(tbName);
+            //SetErrorFacture(tbName);
+            if(!(Verification.CheckName(tbName.Text) == ""))
+            {
+                errorProvider.SetError(tbName, Verification.CheckName(tbName.Text) );
+                btnValidate.Enabled = false;
+            }
+            else
+            {
+                errorProvider.SetError(tbName, null);
+                btnValidate.Enabled = true;
+            }
         }
 
         /// <summary>
         /// textBox "TextChanged" check text boxes and error icones
         private void tbDate_TextChanged(object sender, EventArgs e)
         {
-            SetErrorFacture(tbDate);
+            //SetErrorFacture(tbDate);
+            if (!(Verification.CheckDate(tbDate.Text) == ""))
+            {
+                errorProvider.SetError(tbDate, Verification.CheckDate(tbDate.Text));
+                btnValidate.Enabled = false;
+            }
+            else
+            {
+                errorProvider.SetError(tbDate, null);
+                btnValidate.Enabled = true;
+            }
         }
 
         /// <summary>
         /// textBox "TextChanged" check text boxes and error icones
         private void tbAmount_TextChanged(object sender, EventArgs e)
         {
-            SetErrorFacture(tbAmount);
+            //SetErrorFacture(tbAmount);
+            if (!(Verification.CheckAmount(tbAmount.Text) == ""))
+            {
+                errorProvider.SetError(tbAmount, Verification.CheckAmount(tbAmount.Text));
+                btnValidate.Enabled = false;
+            }
+            else
+            {
+                errorProvider.SetError(tbAmount, null);
+                btnValidate.Enabled = true;
+            }
         }
 
         /// <summary>
         /// textBox "TextChanged" check text boxes and error icones
         private void tbZipCode_TextChanged(object sender, EventArgs e)
         {
-            SetErrorFacture(tbZipCode);
-        }
-
-        /// <summary>
-        /// Check all errors
-        private void SetErrorFacture(TextBox _tb) // object sender,
-        {
-
-            ErrorCheckTB MyErrorCheckTB = new ErrorCheckTB();
-
-            string objName = ((TextBox)_tb).Name;
-            //string objValue = ((TextBox) _tb).Text;
-
-            // Index label
-            int startIndexLabel = 2;
-            String strObjName = objName.Substring(startIndexLabel);
-
-            //btnValidate.Enabled = true;
-            btnDelete.Enabled = true;
-
-            if (_tb.Text.Trim().Length == 0)
+            //SetErrorFacture(tbZipCode);
+            if (!(Verification.CheckZipCode(tbZipCode.Text) == ""))
             {
-                errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est obligatoire.");
-                btnDelete.Enabled = false;
+                errorProvider.SetError(tbZipCode, Verification.CheckZipCode(tbZipCode.Text));
                 btnValidate.Enabled = false;
-                //_tb.Focus();
             }
             else
             {
-                errorProvider.SetError(_tb, null);
-
-                if (MyErrorCheckTB.CheckName(_tb, errorProvider) == false)
-                {
-
-                }
-                    // Champ Name
-                    /*if (strObjName == "Name")
-                    {
-                        if (MyErrorCheckTB.CheckLengthMaxTextBox(tbName, 30)) // CheckLengthMinTextBox(tbName, 2) || 
-                        {
-                            checkObjName = false;
-                            tbName.Focus();
-                            errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " nécessite moins de trente caractères.");
-                        }
-                        else if (MyErrorCheckTB.CheckName(_tb, errorProvider) == false)
-                        {
-                            checkObjName = false;
-                            errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est incorrect.");
-                            _tb.Focus();
-                        }
-                        else
-                        {
-                            checkObjName = true;
-                        }
-                    }*/
-
-                    // Champ Date
-                    if (strObjName == "Date")
-                {
-                    if (MyErrorCheckTB.CheckLengthMinTextBox(tbDate, 10) && MyErrorCheckTB.CheckLengthMaxTextBox(tbDate, 10))
-                    {
-                        checkObjDate = false;
-                        tbDate.Focus();
-                        errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " nécessite dix caractères.");
-                    }
-                    else if (MyErrorCheckTB.CheckDate(_tb, errorProvider) == false)
-                    {
-                        checkObjDate = false;
-                        _tb.Focus();
-                        //errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est incorrect.");
-                    }
-                    else
-                    {
-                        checkObjDate = true;
-                        //errorProvider.SetError(_tb, null);
-                    }
-                }
-
-                // Champ Amount
-                if (strObjName == "Amount")
-                {
-                    if (MyErrorCheckTB.CheckLengthMinTextBox(tbAmount, 1))
-                    {
-                        checkObjAmount = false;
-                        tbAmount.Focus();
-                        errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " nécessite au moins un caractère.");
-                    }
-                    else if (MyErrorCheckTB.CheckAmount(_tb, errorProvider) == false)
-                    {
-                        checkObjAmount = false;
-                        _tb.Focus();
-                        //errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est incorrect.");
-                    }
-                    else
-                    {
-                        checkObjAmount = true;
-                        //errorProvider.SetError(_tb, null);
-                    }
-                }
-
-                // Champ Zip Code
-                if (strObjName == "ZipCode")
-                {
-                    if (MyErrorCheckTB.CheckLengthMinTextBox(tbZipCode, 2))
-                    {
-                        checkObjZipCode = false;
-                        _tb.Focus();
-                        errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " nécessite au moins deux caractères.");
-                    }
-                    else if (MyErrorCheckTB.CheckZipCode(_tb, errorProvider) == false)
-                    {
-                        checkObjZipCode = false;
-                        _tb.Focus();
-                        //errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est incorrect.");
-                    }
-                    else
-                    {
-                        checkObjZipCode = true;
-                        //errorProvider.SetError(_tb, null);
-                    }
-                }
-
-
-                /// <summary>
-                /// Check all errors at null
-                if (checkObjName && (strObjName == "Name"))
-                {
-                    errorProvider.SetError(_tb, null);
-                }
-                if (checkObjDate && (strObjName == "Date"))
-                {
-                    errorProvider.SetError(_tb, null);
-                }
-                if (checkObjAmount && (strObjName == "Amount"))
-                {
-                    errorProvider.SetError(_tb, null);
-                }
-                if (checkObjZipCode && (strObjName == "ZipCode"))
-                {
-                    errorProvider.SetError(_tb, null);
-                }
-
-                //richTextBox1.Text = $"{checkObjName}" + $"{checkObjDate}" + $"{checkObjAmount}" + $"{checkObjZipCode}";
-                /// <summary>
-                /// Button validate eneable / desable 
-                if (checkObjName && checkObjDate && checkObjAmount && checkObjZipCode)
-                {
-                    btnValidate.Enabled = true;
-                }
-                else
-                {
-                    btnValidate.Enabled = false;
-                }
-
+                errorProvider.SetError(tbZipCode, null);
+                btnValidate.Enabled = true;
             }
         }
+
     }
 }

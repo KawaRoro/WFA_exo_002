@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WFA_exo_002", "WFA_exo_002.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CMFacture", "..\CMFacture\CMFacture.csproj", "{75F371FF-E688-4BDD-91A9-D04900A2A900}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLError", "..\CLError\CLError.csproj", "{6D566073-576F-4E67-BC1F-A483E099F00B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CLVerification", "..\CLVerification\CLVerification.csproj", "{F4D75A1E-2648-40F6-9E10-7FC3AC800E2C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +23,10 @@ Global
 		{75F371FF-E688-4BDD-91A9-D04900A2A900}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{75F371FF-E688-4BDD-91A9-D04900A2A900}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{75F371FF-E688-4BDD-91A9-D04900A2A900}.Release|Any CPU.Build.0 = Release|Any CPU
-		{6D566073-576F-4E67-BC1F-A483E099F00B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{6D566073-576F-4E67-BC1F-A483E099F00B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{6D566073-576F-4E67-BC1F-A483E099F00B}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{6D566073-576F-4E67-BC1F-A483E099F00B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F4D75A1E-2648-40F6-9E10-7FC3AC800E2C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F4D75A1E-2648-40F6-9E10-7FC3AC800E2C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F4D75A1E-2648-40F6-9E10-7FC3AC800E2C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F4D75A1E-2648-40F6-9E10-7FC3AC800E2C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
