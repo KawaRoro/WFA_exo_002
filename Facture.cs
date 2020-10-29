@@ -142,29 +142,34 @@ namespace WFA_exo_002
             else
             {
                 errorProvider.SetError(_tb, null);
-                // Champ Name
-                if (strObjName == "Name")
-                {
-                    if (MyErrorCheckTB.CheckLengthMaxTextBox(tbName, 30)) // CheckLengthMinTextBox(tbName, 2) || 
-                    {
-                        checkObjName = false;
-                        tbName.Focus();
-                        errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " nécessite moins de trente caractères.");
-                    }
-                    else if (MyErrorCheckTB.CheckName(_tb, errorProvider) == false)
-                    {
-                        checkObjName = false;
-                        errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est incorrect.");
-                        _tb.Focus();
-                    }
-                    else
-                    {
-                        checkObjName = true;
-                    }
-                }
 
-                // Champ Date
-                if (strObjName == "Date")
+                if (MyErrorCheckTB.CheckName(_tb, errorProvider) == false)
+                {
+
+                }
+                    // Champ Name
+                    /*if (strObjName == "Name")
+                    {
+                        if (MyErrorCheckTB.CheckLengthMaxTextBox(tbName, 30)) // CheckLengthMinTextBox(tbName, 2) || 
+                        {
+                            checkObjName = false;
+                            tbName.Focus();
+                            errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " nécessite moins de trente caractères.");
+                        }
+                        else if (MyErrorCheckTB.CheckName(_tb, errorProvider) == false)
+                        {
+                            checkObjName = false;
+                            errorProvider.SetError(_tb, $@"Le champ " + $"{strObjName}" + " est incorrect.");
+                            _tb.Focus();
+                        }
+                        else
+                        {
+                            checkObjName = true;
+                        }
+                    }*/
+
+                    // Champ Date
+                    if (strObjName == "Date")
                 {
                     if (MyErrorCheckTB.CheckLengthMinTextBox(tbDate, 10) && MyErrorCheckTB.CheckLengthMaxTextBox(tbDate, 10))
                     {
